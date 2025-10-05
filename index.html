@@ -93,12 +93,18 @@
                     <span class="text-2xl text-gray-400 ml-2 font-light">home planner</span>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Events & Meals Column -->
+                    <!-- Events & Shopping Column -->
                     <div class="lg:col-span-2 space-y-6">
                         <!-- Today's Events -->
                         <div class="bg-white p-6 rounded-xl shadow-md">
-                            <h3 class="text-xl font-semibold mb-4">Today's Events</h3>
+                            <h3 class="text-xl font-semibold mb-1">Today's Events</h3>
+                            <p id="dashboard-date" class="text-gray-500 mb-4"></p>
                             <div id="today-events-list" class="space-y-3"></div>
+                        </div>
+                         <!-- Open Shopping Lists -->
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="text-xl font-semibold mb-4">Shopping Lists</h3>
+                            <div id="dashboard-shopping-lists" class="space-y-3"></div>
                         </div>
                         <!-- Upcoming Events -->
                         <div class="bg-white p-6 rounded-xl shadow-md">
@@ -107,17 +113,12 @@
                         </div>
                     </div>
 
-                    <!-- Meals & Shopping Column -->
+                    <!-- Meals Column -->
                     <div class="space-y-6">
                         <!-- Today's Meals -->
                         <div class="bg-white p-6 rounded-xl shadow-md">
                             <h3 class="text-xl font-semibold mb-4">Today's Meals</h3>
                             <div id="today-meals-list" class="space-y-4"></div>
-                        </div>
-                        <!-- Open Shopping Lists -->
-                        <div class="bg-white p-6 rounded-xl shadow-md">
-                            <h3 class="text-xl font-semibold mb-4">Shopping Lists</h3>
-                            <div id="dashboard-shopping-lists" class="space-y-3"></div>
                         </div>
                     </div>
                 </div>
@@ -152,7 +153,7 @@
                         <button id="manage-recipes-btn" class="bg-secondary text-white px-4 py-2 rounded-lg shadow hover:bg-emerald-600 transition flex items-center gap-2"><i data-lucide="book-marked" class="w-5 h-5"></i> Manage Recipes</button>
                     </div>
                 </div>
-                <div id="meal-plan-view" class="bg-white p-6 rounded-xl shadow-md overflow-x-auto">
+                <div id="meal-plan-view" class="space-y-6">
                     <!-- JS will populate the weekly meal planner -->
                 </div>
             </div>
@@ -243,7 +244,7 @@
 
         // --- IndexedDB Logic ---
         const DB_NAME = 'FamilyHubDB';
-        const DB_VERSION = 7; // Version up for new shopping list data structure
+        const DB_VERSION = 7; 
 
         function initDB() {
             return new Promise((resolve, reject) => {
@@ -429,6 +430,8 @@
             const today = new Date(); today.setHours(0,0,0,0);
             const todayStr = today.toISOString().split('T')[0];
 
+            document.getElementById('dashboard-date').textContent = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
             const todayEventsList = document.getElementById('today-events-list');
             const todayEvents = currentEvents.filter(e => e.date === todayStr).sort((a,b) => (a.time || '23:59').localeCompare(b.time || '23:59'));
             if (todayEvents.length > 0) {
@@ -447,7 +450,7 @@
             } else { todayEventsList.innerHTML = `<p class="text-gray-500">No events scheduled for today.</p>`; }
 
             const upcomingEventsList = document.getElementById('upcoming-events-list');
-            const upcomingEvents = currentEvents.filter(e => new Date(e.date) >= today).sort((a,b) => new Date(a.date) - new Date(b.date) || (a.time || '23:59').localeCompare(b.time || '23:59')).slice(0, 5);
+            const upcomingEvents = currentEvents.filter(e => new Date(e.date) > today).sort((a,b) => new Date(a.date) - new Date(b.date) || (a.time || '23:59').localeCompare(b.time || '23:59')).slice(0, 5);
             if (upcomingEvents.length > 0) {
                 upcomingEventsList.innerHTML = upcomingEvents.map(event => `
                      <div class="flex items-start p-3 rounded-lg border border-gray-200">
@@ -476,12 +479,18 @@
             if(openLists.length > 0) {
                 shoppingContainer.innerHTML = openLists.map(list => {
                     const store = currentStores.find(s => s.id === list.storeId);
+                    const itemCount = list.items?.filter(i => !i.checked).length || 0;
                     return `<button data-list-id="${list.id}" class="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 view-shopping-list-btn">
-                        <p class="font-semibold">${list.name}</p>
-                        <p class="text-sm text-gray-500">${store ? store.name : ''}</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold">${store ? store.name : 'Shopping List'}</p>
+                                <p class="text-sm text-gray-500">${list.name}</p>
+                            </div>
+                            ${itemCount > 0 ? `<span class="bg-primary text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">${itemCount}</span>` : ''}
+                        </div>
                     </button>`
                 }).join('');
-            } else { shoppingContainer.innerHTML = '<p class="text-gray-500">No active shopping lists.</p>'; }
+            } else { shoppingContainer.innerHTML = '<p class="text-gray-500">No items on your shopping lists.</p>'; }
         }
 
         function renderCalendar() {
@@ -518,33 +527,39 @@
         function renderMealPlannerPage() {
             const mealPlanView = document.getElementById('meal-plan-view');
             const today = new Date();
-            let weekHtml = `<table class="w-full border-collapse"><thead><tr>`;
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            days.forEach(day => weekHtml += `<th class="border p-2 text-left">${day}</th>`);
-            weekHtml += `</tr></thead><tbody>`;
+            let weekHtml = '';
+            
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(today);
+                day.setDate(today.getDate() - today.getDay() + i);
+                const dateStr = day.toISOString().split('T')[0];
+                const formattedDate = day.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+                const plan = currentMealPlans.find(p => p.date === dateStr);
 
-            const mealTypes = ['breakfast', 'lunch', 'dinner'];
-            mealTypes.forEach(meal => {
-                weekHtml += '<tr>';
-                for (let i = 0; i < 7; i++) {
-                    const day = new Date(today);
-                    day.setDate(today.getDate() - today.getDay() + i);
-                    const dateStr = day.toISOString().split('T')[0];
-                    const plan = currentMealPlans.find(p => p.date === dateStr);
-                    const recipeId = plan ? plan[`${meal}RecipeId`] : null;
-                    const recipe = currentRecipes.find(r => r.id === recipeId);
+                const breakfastRecipe = currentRecipes.find(r => r.id === plan?.breakfastRecipeId);
+                const lunchRecipe = currentRecipes.find(r => r.id === plan?.lunchRecipeId);
+                const dinnerRecipe = currentRecipes.find(r => r.id === plan?.dinnerRecipeId);
 
-                    weekHtml += `<td class="border p-2 align-top h-32">
-                        <div class="font-bold text-sm capitalize">${meal}</div>
-                        <div class="text-sm mt-1 p-1 rounded-md ${recipe ? 'bg-green-100' : 'bg-gray-100'}">
-                            ${recipe ? recipe.name : 'Empty'}
+                weekHtml += `
+                <div class="bg-white p-4 rounded-xl shadow-md">
+                    <h3 class="font-bold text-lg mb-3">${formattedDate}</h3>
+                    <div class="space-y-2">
+                        <div data-date="${dateStr}" data-meal-type="breakfast" class="meal-slot flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
+                            <span class="font-semibold text-gray-500">Breakfast</span>
+                            <span class="text-right ${breakfastRecipe ? 'text-primary font-semibold' : 'text-gray-400'}">${breakfastRecipe ? breakfastRecipe.name : 'Empty'}</span>
                         </div>
-                    </td>`;
-                }
-                weekHtml += '</tr>';
-            });
+                        <div data-date="${dateStr}" data-meal-type="lunch" class="meal-slot flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
+                            <span class="font-semibold text-gray-500">Lunch</span>
+                            <span class="text-right ${lunchRecipe ? 'text-primary font-semibold' : 'text-gray-400'}">${lunchRecipe ? lunchRecipe.name : 'Empty'}</span>
+                        </div>
+                        <div data-date="${dateStr}" data-meal-type="dinner" class="meal-slot flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
+                            <span class="font-semibold text-gray-500">Dinner</span>
+                            <span class="text-right ${dinnerRecipe ? 'text-primary font-semibold' : 'text-gray-400'}">${dinnerRecipe ? dinnerRecipe.name : 'Empty'}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }
 
-            weekHtml += '</tbody></table>';
             mealPlanView.innerHTML = weekHtml;
         }
 
@@ -814,6 +829,22 @@
             </div>`;
         }
 
+        function getMealSelectModal(date, mealType) {
+            const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+            const recipeListHtml = currentRecipes.map(recipe => `
+                <button class="select-recipe-btn w-full text-left p-2 rounded-md hover:bg-indigo-100" data-recipe-id="${recipe.id}" data-date="${date}" data-meal-type="${mealType}">${recipe.name}</button>
+            `).join('');
+
+            return `<div class="p-6">
+                <h3 class="text-xl font-bold mb-4 capitalize">Select ${mealType} for ${formattedDate}</h3>
+                <div class="max-h-64 overflow-y-auto space-y-1 mb-4">${recipeListHtml}</div>
+                <div class="flex justify-between pt-4 border-t">
+                    <button class="remove-meal-btn text-red-600 hover:underline" data-date="${date}" data-meal-type="${mealType}">Remove Meal</button>
+                    <button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button>
+                </div>
+            </div>`;
+        }
+
         async function handleEventFormSubmit(e) {
             e.preventDefault();
             const form = e.target;
@@ -946,6 +977,28 @@
                         await deleteData('masterItems', itemId);
                         await loadAllDataFromDB();
                         showModal(getManageItemsModal(item.storeId));
+                    }
+                } else if (e.target.closest('.meal-slot')) {
+                    const slot = e.target.closest('.meal-slot');
+                    showModal(getMealSelectModal(slot.dataset.date, slot.dataset.mealType));
+                } else if (button.classList.contains('select-recipe-btn')) {
+                    const { recipeId, date, mealType } = button.dataset;
+                    let plan = currentMealPlans.find(p => p.date === date);
+                    if (!plan) {
+                        plan = { date };
+                    }
+                    plan[`${mealType}RecipeId`] = Number(recipeId);
+                    await saveData('mealPlans', plan);
+                    await loadAllDataFromDB();
+                    hideModal();
+                } else if (button.classList.contains('remove-meal-btn')) {
+                     const { date, mealType } = button.dataset;
+                    let plan = currentMealPlans.find(p => p.date === date);
+                    if (plan) {
+                        delete plan[`${mealType}RecipeId`];
+                        await saveData('mealPlans', plan);
+                        await loadAllDataFromDB();
+                        hideModal();
                     }
                 }
                 else if (button.classList.contains('delete-list-item-btn')) {
