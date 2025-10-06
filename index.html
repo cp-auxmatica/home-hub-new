@@ -918,7 +918,12 @@
 
             document.body.addEventListener('click', async (e) => {
                 const button = e.target.closest('button');
-                if (!button) return;
+                if (!button) {
+                    if (e.target.closest('.calendar-day')) {
+                        showModal(getDayEventsModal(e.target.closest('.calendar-day').dataset.date));
+                    }
+                    return;
+                }
 
                 if (button.classList.contains('cancel-btn')) {
                     hideModal();
@@ -932,8 +937,6 @@
                         await loadAllDataFromDB();
                         hideModal();
                     }
-                } else if (e.target.closest('.calendar-day')) {
-                    showModal(getDayEventsModal(e.target.closest('.calendar-day').dataset.date));
                 } else if (button.classList.contains('edit-event-btn')) {
                      const event = currentEvents.find(ev => ev.id === Number(button.dataset.eventId));
                      if (event) showModal(getEventForm(event));
@@ -978,8 +981,8 @@
                         await loadAllDataFromDB();
                         showModal(getManageItemsModal(item.storeId));
                     }
-                } else if (e.target.closest('.meal-slot')) {
-                    const slot = e.target.closest('.meal-slot');
+                } else if (button.classList.contains('meal-slot')) {
+                    const slot = button;
                     showModal(getMealSelectModal(slot.dataset.date, slot.dataset.mealType));
                 } else if (button.classList.contains('select-recipe-btn')) {
                     const { recipeId, date, mealType } = button.dataset;
@@ -1020,9 +1023,9 @@
                 if (e.target.id === 'event-form') {
                     await handleEventFormSubmit(e);
                 }
-                else if (e.target.id === 'recipe-form') handleRecipeFormSubmit(e);
-                else if (e.target.id === 'store-form') handleAddStoreSubmit(e);
-                else if (e.target.id === 'person-form') handlePersonFormSubmit(e);
+                else if (e.target.id === 'recipe-form') { await handleRecipeFormSubmit(e); }
+                else if (e.target.id === 'store-form') { await handleAddStoreSubmit(e); }
+                else if (e.target.id === 'person-form') { await handlePersonFormSubmit(e); }
                 else if (e.target.id === 'add-master-item-form') {
                     const storeId = Number(e.target.dataset.storeId);
                     const formData = new FormData(e.target);
