@@ -122,7 +122,7 @@
                         </div>
                     </div>
                 </div>
-                <button id="fab-add-event" class="fab bg-primary text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition">
+                <button data-action="add-event" id="fab-add-event" class="fab bg-primary text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition">
                     <i data-lucide="plus" class="w-8 h-8"></i>
                 </button>
             </div>
@@ -131,13 +131,13 @@
             <div id="calendar-page" class="page">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold">Calendar</h2>
-                    <button id="add-event-btn" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Add Event</button>
+                    <button data-action="add-event" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Add Event</button>
                 </div>
                 <div id="calendar-view" class="bg-white p-4 rounded-xl shadow-md">
                      <div class="flex items-center justify-between mb-4">
-                        <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-200"><i data-lucide="chevron-left"></i></button>
+                        <button data-action="prev-month" class="p-2 rounded-full hover:bg-gray-200"><i data-lucide="chevron-left"></i></button>
                         <h3 id="month-year-header" class="text-xl font-semibold"></h3>
-                        <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-200"><i data-lucide="chevron-right"></i></button>
+                        <button data-action="next-month" class="p-2 rounded-full hover:bg-gray-200"><i data-lucide="chevron-right"></i></button>
                     </div>
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center">
                         <!-- JS will build the calendar grid -->
@@ -150,7 +150,7 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold">Meal Planner</h2>
                     <div class="space-x-2">
-                        <button id="manage-recipes-btn" class="bg-secondary text-white px-4 py-2 rounded-lg shadow hover:bg-emerald-600 transition flex items-center gap-2"><i data-lucide="book-marked" class="w-5 h-5"></i> Manage Recipes</button>
+                        <button data-action="show-recipes-page" class="bg-secondary text-white px-4 py-2 rounded-lg shadow hover:bg-emerald-600 transition flex items-center gap-2"><i data-lucide="book-marked" class="w-5 h-5"></i> Manage Recipes</button>
                     </div>
                 </div>
                 <div id="meal-plan-view" class="space-y-6">
@@ -163,8 +163,8 @@
                  <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold">My Recipes</h2>
                     <div class="space-x-2">
-                         <button id="back-to-meals-btn" class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition flex items-center gap-2"><i data-lucide="arrow-left" class="w-5 h-5"></i> Back to Planner</button>
-                        <button id="add-recipe-btn" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Add Recipe</button>
+                         <button data-action="show-meals-page" class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition flex items-center gap-2"><i data-lucide="arrow-left" class="w-5 h-5"></i> Back to Planner</button>
+                        <button data-action="add-recipe" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Add Recipe</button>
                     </div>
                 </div>
                 <div id="recipes-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -177,7 +177,7 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold">Shopping by Store</h2>
                      <div class="space-x-2">
-                        <button id="add-store-btn" class="bg-secondary text-white px-4 py-2 rounded-lg shadow hover:bg-emerald-600 transition flex items-center gap-2"><i data-lucide="store" class="w-5 h-5"></i> Add Store</button>
+                        <button data-action="add-store" class="bg-secondary text-white px-4 py-2 rounded-lg shadow hover:bg-emerald-600 transition flex items-center gap-2"><i data-lucide="store" class="w-5 h-5"></i> Add Store</button>
                     </div>
                 </div>
                 <div id="stores-container" class="space-y-6">
@@ -189,7 +189,7 @@
             <div id="family-page" class="page">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold">Family & Friends</h2>
-                    <button id="add-person-btn" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5"></i> Add Person</button>
+                    <button data-action="add-person" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5"></i> Add Person</button>
                 </div>
                 <div id="people-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- JS will populate people -->
@@ -480,7 +480,7 @@
                 shoppingContainer.innerHTML = openLists.map(list => {
                     const store = currentStores.find(s => s.id === list.storeId);
                     const itemCount = list.items?.length || 0;
-                    return `<button data-list-id="${list.id}" class="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 view-shopping-list-btn">
+                    return `<button data-action="view-shopping-list" data-list-id="${list.id}" class="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
                         <div class="flex justify-between items-center">
                             <div>
                                 <p class="font-semibold">${store ? store.name : 'Shopping List'}</p>
@@ -517,7 +517,7 @@
                 const moreEventsHtml = eventsOnDay.length > 2 ? `<div class="text-xs text-gray-500 mt-1">+${eventsOnDay.length - 2} more</div>` : '';
 
                 calendarGrid.innerHTML += `
-                    <div class="border-t border-gray-200 p-1 h-24 overflow-hidden cursor-pointer hover:bg-indigo-50 calendar-day" data-date="${dateStr}">
+                    <div data-action="show-day-details" data-date="${dateStr}" class="border-t border-gray-200 p-1 h-24 overflow-hidden cursor-pointer hover:bg-indigo-50">
                         <div class="font-semibold ${isToday ? 'bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center' : ''}">${day}</div>
                         ${eventsHtml} ${moreEventsHtml}
                     </div>`;
@@ -544,15 +544,15 @@
                 <div class="bg-white p-4 rounded-xl shadow-md">
                     <h3 class="font-bold text-lg mb-3">${formattedDate}</h3>
                     <div class="space-y-2">
-                        <button data-date="${dateStr}" data-meal-type="breakfast" class="meal-slot w-full flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
+                        <button data-action="edit-meal" data-date="${dateStr}" data-meal-type="breakfast" class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
                             <span class="font-semibold text-gray-500">Breakfast</span>
                             <span class="text-right ${breakfastRecipe ? 'text-primary font-semibold' : 'text-gray-400'}">${breakfastRecipe ? breakfastRecipe.name : 'Empty'}</span>
                         </button>
-                        <button data-date="${dateStr}" data-meal-type="lunch" class="meal-slot w-full flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
+                        <button data-action="edit-meal" data-date="${dateStr}" data-meal-type="lunch" class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
                             <span class="font-semibold text-gray-500">Lunch</span>
                             <span class="text-right ${lunchRecipe ? 'text-primary font-semibold' : 'text-gray-400'}">${lunchRecipe ? lunchRecipe.name : 'Empty'}</span>
                         </button>
-                        <button data-date="${dateStr}" data-meal-type="dinner" class="meal-slot w-full flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
+                        <button data-action="edit-meal" data-date="${dateStr}" data-meal-type="dinner" class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-indigo-50 cursor-pointer">
                             <span class="font-semibold text-gray-500">Dinner</span>
                             <span class="text-right ${dinnerRecipe ? 'text-primary font-semibold' : 'text-gray-400'}">${dinnerRecipe ? dinnerRecipe.name : 'Empty'}</span>
                         </button>
@@ -573,8 +573,8 @@
                         ${recipe.ingredients ? `<div class="text-sm"><strong class="block">Ingredients:</strong><pre class="font-sans whitespace-pre-wrap">${recipe.ingredients}</pre></div>` : ''}
                         ${recipe.instructions ? `<div class="text-sm"><strong class="block">Instructions:</strong><p>${recipe.instructions}</p></div>` : ''}
                         <div class="pt-2 border-t mt-2 flex justify-end gap-2">
-                            <button data-recipe-id="${recipe.id}" class="edit-recipe-btn text-sm text-indigo-600 hover:underline">Edit</button>
-                            <button data-recipe-id="${recipe.id}" class="delete-recipe-btn text-sm text-red-600 hover:underline">Delete</button>
+                            <button data-action="edit-recipe" data-recipe-id="${recipe.id}" class="text-sm text-indigo-600 hover:underline">Edit</button>
+                            <button data-action="delete-recipe" data-recipe-id="${recipe.id}" class="text-sm text-red-600 hover:underline">Delete</button>
                         </div>
                     </div>
                 `).join('');
@@ -597,14 +597,14 @@
                             <p class="text-sm text-gray-500">${store.category || 'Uncategorized'}</p>
                         </div>
                         <div class="flex gap-2">
-                            <button data-store-id="${store.id}" class="edit-store-btn text-indigo-600 hover:underline text-sm">Edit Store</button>
+                            <button data-action="edit-store" data-store-id="${store.id}" class="text-indigo-600 hover:underline text-sm">Edit Store</button>
                         </div>
                     </div>
                      <div class="flex gap-2 mt-4">
-                         <button data-list-id="${list?.id}" class="flex-1 start-shopping-btn bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 flex items-center justify-center gap-2">
+                         <button data-action="start-shopping" data-list-id="${list?.id}" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 flex items-center justify-center gap-2">
                              <i data-lucide="shopping-cart"></i> Start Shopping ${itemsToGet > 0 ? `<span class="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${itemsToGet}</span>` : ''}
                          </button>
-                         <button data-store-id="${store.id}" class="manage-items-btn bg-gray-200 px-4 py-2 rounded-lg shadow hover:bg-gray-300 flex items-center justify-center gap-2">
+                         <button data-action="manage-items" data-store-id="${store.id}" class="bg-gray-200 px-4 py-2 rounded-lg shadow hover:bg-gray-300 flex items-center justify-center gap-2">
                               <i data-lucide="clipboard-list"></i> Manage Items
                          </button>
                      </div>
@@ -622,8 +622,8 @@
                            ${person.dob ? `<p class="text-sm text-gray-500">Birthday: ${new Date(person.dob + 'T00:00:00').toLocaleDateString()}</p>` : ''}
                         </div>
                         <div class="flex gap-2">
-                           <button data-person-id="${person.id}" class="edit-person-btn text-indigo-600 text-sm hover:underline">Edit</button>
-                           <button data-person-id="${person.id}" class="delete-person-btn text-red-600 text-sm hover:underline">Delete</button>
+                           <button data-action="edit-person" data-person-id="${person.id}" class="text-indigo-600 text-sm hover:underline">Edit</button>
+                           <button data-action="delete-person" data-person-id="${person.id}" class="text-red-600 text-sm hover:underline">Delete</button>
                         </div>
                     </div>
                 `).join('');
@@ -669,8 +669,8 @@
                     <div><label for="forWhom" class="block text-sm font-medium text-gray-700">For Whom (select multiple)</label><select name="forWhom" id="forWhom" multiple class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 h-24">${peopleOptions}</select></div>
                     <div><label for="chaperones" class="block text-sm font-medium text-gray-700">Driver/Chaperone</label><select name="chaperones" id="chaperones" multiple class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 h-24">${peopleOptions}</select></div>
                     <div class="flex justify-end space-x-2 pt-4">
-                        ${!isNew && !event.isGenerated ? `<button type="button" data-event-id="${event.id}" class="delete-event-btn bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Delete</button>` : ''}
-                        <button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button>
+                        ${!isNew && !event.isGenerated ? `<button type="button" data-action="delete-event" data-event-id="${event.id}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Delete</button>` : ''}
+                        <button type="button" data-action="cancel" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button>
                         <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button>
                     </div>
                 </form>
@@ -687,7 +687,7 @@
                     <div><label for="url" class="block text-sm font-medium text-gray-700">URL (Optional)</label><input type="url" name="url" id="url" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" value="${recipe.url || ''}"></div>
                     <div><label for="ingredients" class="block text-sm font-medium text-gray-700">Ingredients (one per line)</label><textarea name="ingredients" id="ingredients" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">${recipe.ingredients || ''}</textarea></div>
                     <div><label for="instructions" class="block text-sm font-medium text-gray-700">Instructions</label><textarea name="instructions" id="instructions" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">${recipe.instructions || ''}</textarea></div>
-                    <div class="flex justify-end space-x-2 pt-4"><button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button><button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button></div>
+                    <div class="flex justify-end space-x-2 pt-4"><button type="button" data-action="cancel" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button><button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button></div>
                 </form>
             </div>`;
         }
@@ -699,7 +699,7 @@
                     <input type="hidden" name="id" value="${store.id || ''}">
                     <div><label for="name" class="block text-sm font-medium text-gray-700">Store Name</label><input type="text" name="name" id="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" value="${store.name || ''}" required></div>
                     <div><label for="category" class="block text-sm font-medium text-gray-700">Category</label><input type="text" name="category" id="category" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" value="${store.category || ''}" placeholder="e.g., Grocery, Hardware"></div>
-                    <div class="flex justify-end space-x-2 pt-4"><button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button><button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button></div>
+                    <div class="flex justify-end space-x-2 pt-4"><button type="button" data-action="cancel" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button><button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button></div>
                 </form>
             </div>`;
         }
@@ -711,7 +711,7 @@
                     <input type="hidden" name="id" value="${person.id || ''}">
                     <div><label for="name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" name="name" id="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" value="${person.name || ''}" required></div>
                     <div><label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth (Optional)</label><input type="date" name="dob" id="dob" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" value="${person.dob || ''}"></div>
-                    <div class="flex justify-end space-x-2 pt-4"><button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button><button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button></div>
+                    <div class="flex justify-end space-x-2 pt-4"><button type="button" data-action="cancel" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button><button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Save</button></div>
                 </form>
             </div>`;
         }
@@ -726,7 +726,7 @@
                         <p>${item.name}</p>
                         <p class="text-xs text-gray-500">${item.department || 'Uncategorized'}</p>
                     </div>
-                    <button data-item-id="${item.id}" class="delete-master-item-btn text-red-500 hover:text-red-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <button data-action="delete-master-item" data-item-id="${item.id}" class="text-red-500 hover:text-red-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                 </div>
             `).join('');
 
@@ -739,7 +739,7 @@
                 </form>
                 <div class="max-h-64 overflow-y-auto space-y-1">${itemsHtml}</div>
                 <div class="flex justify-end pt-4 mt-4 border-t">
-                    <button type="button" class="cancel-btn bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Done</button>
+                    <button type="button" data-action="cancel" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Done</button>
                 </div>
             </div>`;
         }
@@ -766,7 +766,7 @@
                         <div class="flex items-center space-x-3 p-1">
                             <input type="checkbox" id="item-${list.id}-${item.originalIndex}" data-list-id="${list.id}" data-index="${item.originalIndex}" class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary toggle-item-check" ${item.checked ? 'checked' : ''}>
                             <label for="item-${list.id}-${item.originalIndex}" class="flex-1 ${item.checked ? 'line-through text-gray-400' : ''}">${item.name}</label>
-                            <button data-list-id="${list.id}" data-index="${item.originalIndex}" class="delete-list-item-btn text-red-500 hover:text-red-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button data-action="delete-list-item" data-list-id="${list.id}" data-index="${item.originalIndex}" class="text-red-500 hover:text-red-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `).join('')}
                 </div>
@@ -781,7 +781,7 @@
                         <h2 class="text-3xl font-bold">${list.name}</h2>
                         <p class="text-gray-500">${store.name}</p>
                     </div>
-                    <button id="close-list-view-btn" class="p-2 rounded-full hover:bg-gray-200"><i data-lucide="x" class="w-8 h-8"></i></button>
+                    <button data-action="close-list-view" class="p-2 rounded-full hover:bg-gray-200"><i data-lucide="x" class="w-8 h-8"></i></button>
                 </div>
                 <form id="add-item-form" data-list-id="${list.id}" class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6 p-4 bg-white rounded-xl shadow">
                     <input type="text" name="itemName" list="master-items" class="md:col-span-1 border border-gray-300 rounded-md shadow-sm p-2" placeholder="Item Name" required>
@@ -814,7 +814,7 @@
                                 <p class="font-semibold">${event.title}</p>
                                 ${forWhom ? `<div class="text-xs text-gray-600 pt-1">For: ${forWhom} ${chaperones ? `(with ${chaperones})` : ''}</div>` : ''}
                             </div>
-                            ${!event.isGenerated ? `<button class="edit-event-btn p-1 hover:bg-black/10 rounded-full" data-event-id="${event.id}"><i data-lucide="pencil" class="w-4 h-4"></i></button>` : ''}
+                            ${!event.isGenerated ? `<button data-action="edit-event" data-event-id="${event.id}" class="p-1 hover:bg-black/10 rounded-full"><i data-lucide="pencil" class="w-4 h-4"></i></button>` : ''}
                         </div>
                     </div>`
                 }).join('');
@@ -824,7 +824,7 @@
                 <h3 class="text-xl font-bold mb-4">${formattedDate}</h3>
                 <div class="space-y-3">${eventsHtml}</div>
                  <div class="flex justify-end pt-4 mt-4 border-t">
-                    <button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Close</button>
+                    <button data-action="cancel" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Close</button>
                 </div>
             </div>`;
         }
@@ -832,71 +832,17 @@
         function getMealSelectModal(date, mealType) {
             const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
             const recipeListHtml = currentRecipes.map(recipe => `
-                <button class="select-recipe-btn w-full text-left p-2 rounded-md hover:bg-indigo-100" data-recipe-id="${recipe.id}" data-date="${date}" data-meal-type="${mealType}">${recipe.name}</button>
+                <button data-action="select-recipe" data-recipe-id="${recipe.id}" data-date="${date}" data-meal-type="${mealType}" class="w-full text-left p-2 rounded-md hover:bg-indigo-100">${recipe.name}</button>
             `).join('');
 
             return `<div class="p-6">
                 <h3 class="text-xl font-bold mb-4 capitalize">Select ${mealType} for ${formattedDate}</h3>
                 <div class="max-h-64 overflow-y-auto space-y-1 mb-4">${recipeListHtml}</div>
                 <div class="flex justify-between pt-4 border-t">
-                    <button class="remove-meal-btn text-red-600 hover:underline" data-date="${date}" data-meal-type="${mealType}">Remove Meal</button>
-                    <button type="button" class="cancel-btn bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button>
+                    <button data-action="remove-meal" data-date="${date}" data-meal-type="${mealType}" class="text-red-600 hover:underline">Remove Meal</button>
+                    <button type="button" data-action="cancel" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Cancel</button>
                 </div>
             </div>`;
-        }
-
-        async function handleEventFormSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
-            const eventData = {
-                title: formData.get('title'), date: formData.get('date'), time: formData.get('time'),
-                category: formData.get('category'), forWhom: formData.getAll('forWhom').map(Number),
-                chaperones: formData.getAll('chaperones').map(Number),
-            };
-            const id = formData.get('id');
-            if (id) eventData.id = Number(id);
-            await saveData('events', eventData);
-            await loadAllDataFromDB();
-            hideModal();
-        }
-        async function handleRecipeFormSubmit(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const recipeData = {
-                name: formData.get('name'), url: formData.get('url'),
-                ingredients: formData.get('ingredients'), instructions: formData.get('instructions'),
-            };
-            const id = formData.get('id');
-            if (id) recipeData.id = Number(id);
-            await saveData('recipes', recipeData);
-            await loadAllDataFromDB();
-            hideModal();
-        }
-        async function handleAddStoreSubmit(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const storeData = { name: formData.get('name'), category: formData.get('category') };
-            const id = formData.get('id');
-            if (id) {
-                storeData.id = Number(id);
-                await saveData('stores', storeData);
-            } else {
-                const newStoreId = await saveData('stores', storeData);
-                await saveData('shoppingLists', { name: `Shopping List for ${storeData.name}`, storeId: newStoreId, items: [] });
-            }
-            await loadAllDataFromDB();
-            hideModal();
-        }
-        async function handlePersonFormSubmit(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const personData = { name: formData.get('name'), dob: formData.get('dob') };
-            const id = formData.get('id');
-            if (id) personData.id = Number(id);
-            await saveData('people', personData);
-            await loadAllDataFromDB();
-            hideModal();
         }
         
         const modalBackdrop = document.getElementById('modal-backdrop');
@@ -913,47 +859,65 @@
             modalContent.innerHTML = '';
         }
         
-        function setupModalListeners() {
-            modalBackdrop.addEventListener('click', e => { if (e.target === modalBackdrop) hideModal(); });
+        async function handleGlobalClick(e) {
+            const target = e.target;
+            const actionTarget = target.closest('[data-action]');
+            if (!actionTarget) return;
 
-            document.body.addEventListener('click', async (e) => {
-                const button = e.target.closest('button');
-                if (!button) {
-                    if (e.target.closest('.calendar-day')) {
-                        showModal(getDayEventsModal(e.target.closest('.calendar-day').dataset.date));
-                    }
-                    return;
-                }
+            const { action, ...dataset } = actionTarget.dataset;
 
-                if (button.classList.contains('cancel-btn')) {
-                    hideModal();
-                } else if (button.id === 'close-list-view-btn') {
+            switch (action) {
+                case 'cancel': hideModal(); break;
+                case 'close-list-view':
                     shoppingListDetailView.style.display = 'none';
                     shoppingListDetailView.innerHTML = '';
-                } else if (button.classList.contains('delete-event-btn')) {
-                    const eventId = Number(button.dataset.eventId);
+                    break;
+                case 'show-day-details': showModal(getDayEventsModal(dataset.date)); break;
+                // Add/Show Modals
+                case 'add-event': showModal(getEventForm()); break;
+                case 'add-recipe': showModal(getRecipeForm()); break;
+                case 'add-store': showModal(getStoreForm()); break;
+                case 'add-person': showModal(getPersonForm()); break;
+                // Edits
+                case 'edit-event': {
+                    const event = currentEvents.find(ev => ev.id === Number(dataset.eventId));
+                    if (event) showModal(getEventForm(event));
+                    break;
+                }
+                case 'edit-recipe': {
+                    const recipe = currentRecipes.find(r => r.id === Number(dataset.recipeId));
+                    if (recipe) showModal(getRecipeForm(recipe));
+                    break;
+                }
+                case 'edit-store': {
+                     const store = currentStores.find(s => s.id === Number(dataset.storeId));
+                     if (store) showModal(getStoreForm(store));
+                     break;
+                }
+                case 'edit-person': {
+                     const person = currentPeople.find(p => p.id === Number(dataset.personId));
+                     if (person) showModal(getPersonForm(person));
+                     break;
+                }
+                // Deletes
+                case 'delete-event': {
                     if (confirm('Are you sure you want to delete this event?')) {
-                        await deleteData('events', eventId);
+                        await deleteData('events', Number(dataset.eventId));
                         await loadAllDataFromDB();
                         hideModal();
                     }
-                } else if (button.classList.contains('edit-event-btn')) {
-                     const event = currentEvents.find(ev => ev.id === Number(button.dataset.eventId));
-                     if (event) showModal(getEventForm(event));
-                } else if (button.classList.contains('edit-person-btn')) {
-                     const person = currentPeople.find(p => p.id === Number(button.dataset.personId));
-                     if (person) showModal(getPersonForm(person));
-                } else if (button.classList.contains('delete-person-btn')) {
-                    if (confirm('Are you sure? This will remove them from all events.')) {
-                        await deleteData('people', Number(button.dataset.personId));
+                    break;
+                }
+                case 'delete-recipe': {
+                    if (confirm('Are you sure?')) {
+                        await deleteData('recipes', Number(dataset.recipeId));
                         await loadAllDataFromDB();
                     }
-                } else if (button.classList.contains('edit-store-btn')) {
-                     const store = currentStores.find(s => s.id === Number(button.dataset.storeId));
-                     if (store) showModal(getStoreForm(store));
-                } else if (button.classList.contains('delete-store-btn')) {
+                    break;
+                }
+                case 'delete-store': {
                     if (confirm('Are you sure? This will delete the store and its shopping list.')) {
-                        const storeId = Number(button.dataset.storeId);
+                        const storeId = Number(dataset.storeId);
                         await deleteData('stores', storeId);
                         const listToDelete = currentShoppingLists.find(l => l.storeId === storeId);
                         if (listToDelete) await deleteData('shoppingLists', listToDelete.id);
@@ -961,41 +925,60 @@
                         await Promise.all(itemsToDelete.map(i => deleteData('masterItems', i.id)));
                         await loadAllDataFromDB();
                     }
-                } else if (button.classList.contains('edit-recipe-btn')) {
-                     const recipe = currentRecipes.find(r => r.id === Number(button.dataset.recipeId));
-                     if (recipe) showModal(getRecipeForm(recipe));
-                } else if (button.classList.contains('delete-recipe-btn')) {
-                    if (confirm('Are you sure?')) {
-                        await deleteData('recipes', Number(button.dataset.recipeId));
+                    break;
+                }
+                case 'delete-person': {
+                    if (confirm('Are you sure? This will remove them from all events.')) {
+                        await deleteData('people', Number(dataset.personId));
                         await loadAllDataFromDB();
                     }
-                } else if (button.classList.contains('start-shopping-btn') || button.classList.contains('view-shopping-list-btn')) {
-                    renderShoppingListDetailView(Number(button.dataset.listId));
-                } else if (button.classList.contains('manage-items-btn')) {
-                    showModal(getManageItemsModal(Number(button.dataset.storeId)));
-                } else if (button.classList.contains('delete-master-item-btn')) {
-                    const itemId = Number(button.dataset.itemId);
+                    break;
+                }
+                // Shopping
+                 case 'start-shopping':
+                 case 'view-shopping-list':
+                    renderShoppingListDetailView(Number(dataset.listId));
+                    break;
+                case 'manage-items':
+                    showModal(getManageItemsModal(Number(dataset.storeId)));
+                    break;
+                case 'delete-master-item': {
                     if(confirm('Delete this master item?')) {
+                        const itemId = Number(dataset.itemId);
                         const item = currentMasterItems.find(i => i.id === itemId);
                         await deleteData('masterItems', itemId);
                         await loadAllDataFromDB();
                         showModal(getManageItemsModal(item.storeId));
                     }
-                } else if (button.classList.contains('meal-slot')) {
-                    const slot = button;
-                    showModal(getMealSelectModal(slot.dataset.date, slot.dataset.mealType));
-                } else if (button.classList.contains('select-recipe-btn')) {
-                    const { recipeId, date, mealType } = button.dataset;
-                    let plan = currentMealPlans.find(p => p.date === date);
-                    if (!plan) {
-                        plan = { date };
+                    break;
+                }
+                 case 'delete-list-item': {
+                    const { listId, index } = dataset;
+                    const list = currentShoppingLists.find(l => l.id === Number(listId));
+                    if (list) {
+                        list.items.splice(Number(index), 1);
+                        await saveData('shoppingLists', list);
+                        await loadAllDataFromDB();
+                        renderShoppingListDetailView(Number(listId));
                     }
+                    break;
+                }
+                // Meals
+                case 'edit-meal':
+                    showModal(getMealSelectModal(dataset.date, dataset.mealType));
+                    break;
+                case 'select-recipe': {
+                    const { recipeId, date, mealType } = dataset;
+                    let plan = currentMealPlans.find(p => p.date === date);
+                    if (!plan) plan = { date };
                     plan[`${mealType}RecipeId`] = Number(recipeId);
                     await saveData('mealPlans', plan);
                     await loadAllDataFromDB();
                     hideModal();
-                } else if (button.classList.contains('remove-meal-btn')) {
-                     const { date, mealType } = button.dataset;
+                    break;
+                }
+                case 'remove-meal': {
+                    const { date, mealType } = dataset;
                     let plan = currentMealPlans.find(p => p.date === date);
                     if (plan) {
                         delete plan[`${mealType}RecipeId`];
@@ -1003,32 +986,76 @@
                         await loadAllDataFromDB();
                         hideModal();
                     }
+                    break;
                 }
-                else if (button.classList.contains('delete-list-item-btn')) {
-                    const listId = Number(button.dataset.listId);
-                    const itemIndex = Number(button.dataset.index);
-                    const list = currentShoppingLists.find(l => l.id === listId);
-                    if (list) {
-                        list.items.splice(itemIndex, 1);
-                        await saveData('shoppingLists', list);
-                        await loadAllDataFromDB();
-                        renderShoppingListDetailView(listId);
-                    }
-                }
-            });
+                // Page Navigation & Calendar
+                case 'show-recipes-page': showPage('recipes-page'); break;
+                case 'show-meals-page': showPage('meals-page'); break;
+                case 'prev-month':
+                    currentDate.setMonth(currentDate.getMonth() - 1);
+                    renderCalendar();
+                    refreshIcons();
+                    break;
+                case 'next-month':
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    renderCalendar();
+                    refreshIcons();
+                    break;
+            }
+        }
 
-            // Handle forms in both modal and full-screen view
-            const formHandler = async (e) => {
-                e.preventDefault();
-                if (e.target.id === 'event-form') {
-                    await handleEventFormSubmit(e);
+        async function handleGlobalSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            
+            switch(form.id) {
+                case 'event-form': {
+                    const formData = new FormData(form);
+                    const eventData = {
+                        title: formData.get('title'), date: formData.get('date'), time: formData.get('time'),
+                        category: formData.get('category'), forWhom: formData.getAll('forWhom').map(Number),
+                        chaperones: formData.getAll('chaperones').map(Number),
+                    };
+                    const id = formData.get('id');
+                    if (id) eventData.id = Number(id);
+                    await saveData('events', eventData);
+                    break;
                 }
-                else if (e.target.id === 'recipe-form') { await handleRecipeFormSubmit(e); }
-                else if (e.target.id === 'store-form') { await handleAddStoreSubmit(e); }
-                else if (e.target.id === 'person-form') { await handlePersonFormSubmit(e); }
-                else if (e.target.id === 'add-master-item-form') {
-                    const storeId = Number(e.target.dataset.storeId);
-                    const formData = new FormData(e.target);
+                case 'recipe-form': {
+                    const formData = new FormData(form);
+                    const recipeData = {
+                        name: formData.get('name'), url: formData.get('url'),
+                        ingredients: formData.get('ingredients'), instructions: formData.get('instructions'),
+                    };
+                    const id = formData.get('id');
+                    if (id) recipeData.id = Number(id);
+                    await saveData('recipes', recipeData);
+                    break;
+                }
+                 case 'store-form': {
+                    const formData = new FormData(form);
+                    const storeData = { name: formData.get('name'), category: formData.get('category') };
+                    const id = formData.get('id');
+                    if (id) {
+                        storeData.id = Number(id);
+                        await saveData('stores', storeData);
+                    } else {
+                        const newStoreId = await saveData('stores', storeData);
+                        await saveData('shoppingLists', { name: `Shopping List for ${storeData.name}`, storeId: newStoreId, items: [] });
+                    }
+                    break;
+                }
+                case 'person-form': {
+                    const formData = new FormData(form);
+                    const personData = { name: formData.get('name'), dob: formData.get('dob') };
+                    const id = formData.get('id');
+                    if (id) personData.id = Number(id);
+                    await saveData('people', personData);
+                    break;
+                }
+                case 'add-master-item-form': {
+                    const storeId = Number(form.dataset.storeId);
+                    const formData = new FormData(form);
                     const itemName = formData.get('itemName').trim();
                     const department = formData.get('department').trim() || 'Uncategorized';
                     if (storeId && itemName) {
@@ -1036,11 +1063,12 @@
                         await loadAllDataFromDB();
                         showModal(getManageItemsModal(storeId));
                     }
+                    return; // Return early to prevent hiding modal
                 }
-                else if (e.target.id === 'add-item-form') {
-                    const listId = Number(e.target.dataset.listId);
+                case 'add-item-form': {
+                    const listId = Number(form.dataset.listId);
                     const list = currentShoppingLists.find(l => l.id === listId);
-                    const formData = new FormData(e.target);
+                    const formData = new FormData(form);
                     const itemName = formData.get('itemName').trim();
                     const department = formData.get('department').trim() || 'Uncategorized';
                     if (list && itemName) {
@@ -1055,29 +1083,29 @@
                         await loadAllDataFromDB();
                         renderShoppingListDetailView(listId);
                     }
+                    return; // Return early
                 }
-            };
-            modalContent.addEventListener('submit', formHandler);
-            shoppingListDetailView.addEventListener('submit', formHandler);
+            }
+            // Default action after most form submissions
+            await loadAllDataFromDB();
+            hideModal();
+        }
 
-            // Handle checkbox changes in both views
-            const changeHandler = async (e) => {
-                if (e.target.classList.contains('toggle-item-check')) {
-                    const listId = Number(e.target.dataset.listId);
-                    const itemIndex = Number(e.target.dataset.index);
-                    const list = currentShoppingLists.find(l => l.id === listId);
-                    if (list && list.items[itemIndex]) {
-                        list.items[itemIndex].checked = e.target.checked;
-                        await saveData('shoppingLists', list);
-                        await loadAllDataFromDB();
-                        if (shoppingListDetailView.style.display === 'block') {
-                            renderShoppingListDetailView(listId);
-                        }
+        async function handleGlobalChange(e) {
+            const target = e.target;
+            if (target.classList.contains('toggle-item-check')) {
+                const listId = Number(target.dataset.listId);
+                const itemIndex = Number(target.dataset.index);
+                const list = currentShoppingLists.find(l => l.id === listId);
+                if (list && list.items[itemIndex]) {
+                    list.items[itemIndex].checked = target.checked;
+                    await saveData('shoppingLists', list);
+                    await loadAllDataFromDB();
+                    if (shoppingListDetailView.style.display === 'block') {
+                        renderShoppingListDetailView(listId);
                     }
                 }
-            };
-            modalContent.addEventListener('change', changeHandler);
-            shoppingListDetailView.addEventListener('change', changeHandler);
+            }
         }
 
         // --- App Entry Point ---
@@ -1087,21 +1115,17 @@
                 await populateWithSampleData();
                 await loadAllDataFromDB();
             
+                // Setup global listeners
+                document.body.addEventListener('click', handleGlobalClick);
+                document.body.addEventListener('submit', handleGlobalSubmit);
+                document.body.addEventListener('change', handleGlobalChange);
+
+                // Initial navigation
+                window.addEventListener('hashchange', handleNavigation);
                 document.querySelectorAll('.nav-link').forEach(link => {
                     link.addEventListener('click', e => { e.preventDefault(); window.location.hash = link.getAttribute('href'); });
                 });
-                window.addEventListener('hashchange', handleNavigation);
-                document.getElementById('add-event-btn').addEventListener('click', () => showModal(getEventForm()));
-                document.getElementById('fab-add-event').addEventListener('click', () => showModal(getEventForm()));
-                document.getElementById('prev-month-btn').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); refreshIcons(); });
-                document.getElementById('next-month-btn').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); refreshIcons(); });
-                document.getElementById('manage-recipes-btn').addEventListener('click', () => showPage('recipes-page'));
-                document.getElementById('back-to-meals-btn').addEventListener('click', () => showPage('meals-page'));
-                document.getElementById('add-recipe-btn').addEventListener('click', () => showModal(getRecipeForm()));
-                document.getElementById('add-store-btn').addEventListener('click', () => showModal(getStoreForm()));
-                document.getElementById('add-person-btn').addEventListener('click', () => showModal(getPersonForm()));
                 
-                setupModalListeners();
                 refreshIcons();
             } catch (error) {
                 console.error("Critical error on startup:", error);
