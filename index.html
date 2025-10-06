@@ -1008,87 +1008,92 @@
             e.preventDefault();
             const form = e.target;
             
-            switch(form.id) {
-                case 'event-form': {
-                    const formData = new FormData(form);
-                    const eventData = {
-                        title: formData.get('title'), date: formData.get('date'), time: formData.get('time'),
-                        category: formData.get('category'), forWhom: formData.getAll('forWhom').map(Number),
-                        chaperones: formData.getAll('chaperones').map(Number),
-                    };
-                    const id = formData.get('id');
-                    if (id) eventData.id = Number(id);
-                    await saveData('events', eventData);
-                    break;
-                }
-                case 'recipe-form': {
-                    const formData = new FormData(form);
-                    const recipeData = {
-                        name: formData.get('name'), url: formData.get('url'),
-                        ingredients: formData.get('ingredients'), instructions: formData.get('instructions'),
-                    };
-                    const id = formData.get('id');
-                    if (id) recipeData.id = Number(id);
-                    await saveData('recipes', recipeData);
-                    break;
-                }
-                 case 'store-form': {
-                    const formData = new FormData(form);
-                    const storeData = { name: formData.get('name'), category: formData.get('category') };
-                    const id = formData.get('id');
-                    if (id) {
-                        storeData.id = Number(id);
-                        await saveData('stores', storeData);
-                    } else {
-                        const newStoreId = await saveData('stores', storeData);
-                        await saveData('shoppingLists', { name: `Shopping List for ${storeData.name}`, storeId: newStoreId, items: [] });
+            try {
+                switch(form.id) {
+                    case 'event-form': {
+                        const formData = new FormData(form);
+                        const eventData = {
+                            title: formData.get('title'), date: formData.get('date'), time: formData.get('time'),
+                            category: formData.get('category'), forWhom: formData.getAll('forWhom').map(Number),
+                            chaperones: formData.getAll('chaperones').map(Number),
+                        };
+                        const id = formData.get('id');
+                        if (id) eventData.id = Number(id);
+                        await saveData('events', eventData);
+                        break;
                     }
-                    break;
-                }
-                case 'person-form': {
-                    const formData = new FormData(form);
-                    const personData = { name: formData.get('name'), dob: formData.get('dob') };
-                    const id = formData.get('id');
-                    if (id) personData.id = Number(id);
-                    await saveData('people', personData);
-                    break;
-                }
-                case 'add-master-item-form': {
-                    const storeId = Number(form.dataset.storeId);
-                    const formData = new FormData(form);
-                    const itemName = formData.get('itemName').trim();
-                    const department = formData.get('department').trim() || 'Uncategorized';
-                    if (storeId && itemName) {
-                        await saveData('masterItems', { name: itemName, department, storeId });
-                        await loadAllDataFromDB();
-                        showModal(getManageItemsModal(storeId));
+                    case 'recipe-form': {
+                        const formData = new FormData(form);
+                        const recipeData = {
+                            name: formData.get('name'), url: formData.get('url'),
+                            ingredients: formData.get('ingredients'), instructions: formData.get('instructions'),
+                        };
+                        const id = formData.get('id');
+                        if (id) recipeData.id = Number(id);
+                        await saveData('recipes', recipeData);
+                        break;
                     }
-                    return; // Return early to prevent hiding modal
-                }
-                case 'add-item-form': {
-                    const listId = Number(form.dataset.listId);
-                    const list = currentShoppingLists.find(l => l.id === listId);
-                    const formData = new FormData(form);
-                    const itemName = formData.get('itemName').trim();
-                    const department = formData.get('department').trim() || 'Uncategorized';
-                    if (list && itemName) {
-                        if (!list.items) list.items = [];
-                        list.items.push({ name: itemName, checked: false, department });
-                        await saveData('shoppingLists', list);
-
-                        const masterItemExists = currentMasterItems.some(i => i.storeId === list.storeId && i.name.toLowerCase() === itemName.toLowerCase());
-                        if (!masterItemExists) {
-                            await saveData('masterItems', { name: itemName, storeId: list.storeId, department });
+                    case 'store-form': {
+                        const formData = new FormData(form);
+                        const storeData = { name: formData.get('name'), category: formData.get('category') };
+                        const id = formData.get('id');
+                        if (id) {
+                            storeData.id = Number(id);
+                            await saveData('stores', storeData);
+                        } else {
+                            const newStoreId = await saveData('stores', storeData);
+                            await saveData('shoppingLists', { name: `Shopping List for ${storeData.name}`, storeId: newStoreId, items: [] });
                         }
-                        await loadAllDataFromDB();
-                        renderShoppingListDetailView(listId);
+                        break;
                     }
-                    return; // Return early
+                    case 'person-form': {
+                        const formData = new FormData(form);
+                        const personData = { name: formData.get('name'), dob: formData.get('dob') };
+                        const id = formData.get('id');
+                        if (id) personData.id = Number(id);
+                        await saveData('people', personData);
+                        break;
+                    }
+                    case 'add-master-item-form': {
+                        const storeId = Number(form.dataset.storeId);
+                        const formData = new FormData(form);
+                        const itemName = formData.get('itemName').trim();
+                        const department = formData.get('department').trim() || 'Uncategorized';
+                        if (storeId && itemName) {
+                            await saveData('masterItems', { name: itemName, department, storeId });
+                            await loadAllDataFromDB();
+                            showModal(getManageItemsModal(storeId));
+                        }
+                        return; // Return early to prevent hiding modal
+                    }
+                    case 'add-item-form': {
+                        const listId = Number(form.dataset.listId);
+                        const list = currentShoppingLists.find(l => l.id === listId);
+                        const formData = new FormData(form);
+                        const itemName = formData.get('itemName').trim();
+                        const department = formData.get('department').trim() || 'Uncategorized';
+                        if (list && itemName) {
+                            if (!list.items) list.items = [];
+                            list.items.push({ name: itemName, checked: false, department });
+                            await saveData('shoppingLists', list);
+
+                            const masterItemExists = currentMasterItems.some(i => i.storeId === list.storeId && i.name.toLowerCase() === itemName.toLowerCase());
+                            if (!masterItemExists) {
+                                await saveData('masterItems', { name: itemName, storeId: list.storeId, department });
+                            }
+                            await loadAllDataFromDB();
+                            renderShoppingListDetailView(listId);
+                        }
+                        return; // Return early
+                    }
                 }
+                // Default action after most form submissions
+                await loadAllDataFromDB();
+                hideModal();
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                alert("There was an error saving your data. Please try again.");
             }
-            // Default action after most form submissions
-            await loadAllDataFromDB();
-            hideModal();
         }
 
         async function handleGlobalChange(e) {
